@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+dist-ssr/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# TypeScript build cache
+*.tsbuildinfo
+
+coverage/
+*.local
