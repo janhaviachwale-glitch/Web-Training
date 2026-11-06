@@ -7,6 +7,14 @@ const { user, defaultSettings } = require("./data");
 const app = express();
 const PORT = 3000;
 
+// Expose only non-sensitive user information to the client.
+const publicUser = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role
+};
+
 app.use((req, res, next) => {
     const nonce = crypto.randomBytes(16).toString("base64");
 
@@ -34,7 +42,7 @@ app.use(express.json());
  * Home page
  */
 app.get("/", (req, res) => {
-    const initialUserData = JSON.stringify(user);
+    const initialUserData = JSON.stringify(publicUser);
 
     res.send(`
         <!DOCTYPE html>
@@ -111,7 +119,7 @@ app.get("/", (req, res) => {
  * Profile API
  */
 app.get("/api/profile", (req, res) => {
-    res.json(user);
+    res.json(publicUser);
 });
 
 /*
