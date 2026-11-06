@@ -29,9 +29,12 @@ app.use((req, res, next) => {
             "img-src 'self' data:",
             "object-src 'none'",
             "base-uri 'self'",
-            "form-action 'self'"
+            "form-action 'self'",
+            "frame-ancestors 'none'",
         ].join("; ")
     );
+
+    res.setHeader("X-Frame-Options", "DENY");
 
     next();
 });
