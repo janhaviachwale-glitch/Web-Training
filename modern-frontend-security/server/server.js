@@ -102,13 +102,46 @@ app.get("/api/settings", (req, res) => {
 app.post("/api/settings", (req, res) => {
     const incomingSettings = req.body;
 
-    const settings = {};
+    const allowedValues = {
+        theme: ["light", "dark"],
+        language: ["en", "fr"],
+        fontSize: ["small", "medium", "large"]
+    };
 
-    for (const key in incomingSettings) {
-        settings[key] = incomingSettings[key];
+    if (
+        !incomingSettings ||
+        typeof incomingSettings !== "object" ||
+        Array.isArray(incomingSettings)
+    ) {
+        return res.status(400).json({
+            message: "Invalid settings data."
+        });
     }
 
-    res.json({
+    const allowedKeys = Object.keys(allowedValues);
+
+    const invalidKeys = Object.keys(incomingSettings).filter(
+        (key) => !allowedKeys.includes(key)
+    );
+
+    if (
+        invalidKeys.length > 0 ||
+        !allowedKeys.every(
+            (key) => allowedValues[key].includes(incomingSettings[key])
+        )
+    ) {
+        return res.status(400).json({
+            message: "Invalid settings values or keys."
+        });
+    }
+
+    const settings = {
+        theme: incomingSettings.theme,
+        language: incomingSettings.language,
+        fontSize: incomingSettings.fontSize
+    };
+
+    return res.json({
         message: "Settings saved successfully.",
         settings
     });

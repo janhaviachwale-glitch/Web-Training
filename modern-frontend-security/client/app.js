@@ -23,13 +23,11 @@ profileCard.append(heading, email, role);
 app.replaceChildren(profileCard);
 
 function prepareSettings(userSettings) {
-    const settings = {};
-
-    for (const key in userSettings) {
-        settings[key] = userSettings[key];
-    }
-
-    return settings;
+    return {
+        theme: userSettings.theme,
+        language: userSettings.language,
+        fontSize: userSettings.fontSize
+    };
 }
 
 const saveButton = document.getElementById("save-settings");
