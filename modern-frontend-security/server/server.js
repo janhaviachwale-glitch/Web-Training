@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const express = require("express");
 const path = require("path");
 
@@ -5,6 +6,27 @@ const { user, defaultSettings } = require("./data");
 
 const app = express();
 const PORT = 3000;
+
+app.use((req, res, next) => {
+    const nonce = crypto.randomBytes(16).toString("base64");
+
+    res.locals.cspNonce = nonce;
+
+    res.setHeader(
+        "Content-Security-Policy",
+        [
+            "default-src 'self'",
+            `script-src 'self' 'nonce-${nonce}'`,
+            `style-src 'self' 'nonce-${nonce}'`,
+            "img-src 'self' data:",
+            "object-src 'none'",
+            "base-uri 'self'",
+            "form-action 'self'"
+        ].join("; ")
+    );
+
+    next();
+});
 
 app.use(express.json());
 
@@ -75,7 +97,7 @@ app.get("/", (req, res) => {
                 </section>
             </main>
 
-            <script>
+            <script nonce="${res.locals.cspNonce}">
                 window.initialUser = ${initialUserData};
             </script>
 
@@ -162,7 +184,7 @@ app.get("/account", (req, res) => {
             >
             <title>Account Settings</title>
 
-            <style>
+            <style nonce="${res.locals.cspNonce}">
                 body {
                     font-family: Arial, sans-serif;
                     background: #f4f4f4;
@@ -218,7 +240,7 @@ app.get("/account", (req, res) => {
                 <p id="status"></p>
             </div>
 
-            <script>
+            <script nonce="${res.locals.cspNonce}">
                 document
                     .getElementById("delete-account")
                     .addEventListener("click", () => {
