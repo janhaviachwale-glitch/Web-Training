@@ -1,0 +1,23 @@
+Finding 1: location.hash - Untrusted URL Data
+
+The URL fragment is controlled by the user and must be treated as untrusted input. An attacker can craft a URL containing malicious content and send it to another user.
+
+Finding 2: innerHTML - DOM-Based Cross-Site Scripting (DOM XSS)
+
+The application inserts untrusted URL data into innerHTML. The browser parses the value as HTML, which can allow malicious scripts or event handlers to execute.
+
+Finding 3: localStorage - Untrusted Client-Side Storage
+
+Data retrieved from localStorage can be modified by users or accessed by malicious same-origin scripts. It must not be trusted as secure configuration.
+
+Finding 4: Object.assign - Prototype Pollution
+
+Merging untrusted parsed data into an ordinary object can allow a malicious __proto__ property to modify the target object's prototype.
+
+Finding 5: JSON.parse - Unvalidated Stored Data
+
+The parsed configuration is not validated against an expected structure. Malformed or unexpected data can cause errors or introduce unsafe configuration values.
+
+Finding 6: renderClient - Potential Sensitive Data Exposure
+
+Passing the complete user object to client-side rendering can expose sensitive information if the object contains session tokens, refresh tokens, or other server-only data. Only necessary public user information should be exposed.
